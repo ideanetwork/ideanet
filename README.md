@@ -7,15 +7,15 @@ Included here is code to do the analyses and visualize the results for a concept
  
 # Run appllication
 
-*Run the following lines of code in R console on your local machine.
+*Run the following lines of code in R console on your local machine.*
 
-*After running next line of code the first time,add hash tag (#) at beginning of line, prior to word "install" to avoid rerunning this line each time and downloading a new copy. Remove the hash tag, to download a new copy whenever desired in case of updates and new functionality. 
+*After running next line of code the first time,add hash tag (#) at beginning of line, prior to word "install" to avoid rerunning this line each time and downloading a new copy. Remove the hash tag, to download a new copy whenever desired in case of updates and new functionality.*
 
 install.packages("devtools") # add hash tag at the beginning of this line, prior to the word "install" to skip this line of code.
 
 library(devtools) # do not add a hash tag at the beginning of this line, run this line of code every time.
 
-*After running this next line of code the first time, add hash tag (#) at beginning of line to avoid rerunning this line each time and downloading a new copy. Remove the hash tag, to download a new copy whenever desired or in case of updates with new functionality.
+*After running this next line of code the first time, add hash tag (#) at beginning of line to avoid rerunning this line each time and downloading a new copy. Remove the hash tag, to download a new copy whenever desired or in case of updates with new functionality.*
 
 install_github("ideanetwork/ideanet") # add hash tag at the beginning of this line, prior to the word "install" to skip this line of code.
 
