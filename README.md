@@ -16,6 +16,6 @@ library(devtools)  # run once then add hash tag (#) at the beginning of this lin
 
 install_github("ideanetwork/ideanet") # run once and the add hash tag (#) at the beginning of this line, prior to the word "install." 
 
-library(Ideanet)
+library(Ideanet) # note - case sensitive
 
 ideanet() 
