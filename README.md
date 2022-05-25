@@ -1,19 +1,3 @@
----
-title: "Ideanet"
-subtitle: "A menu driven application for concept mapping"
-author: "Dan McLinden - Idea Networks, LLC"
-date: "2022-05-25"
-output: 
-  pdf_document:
-    keep_md: true
-urlcolor: blue
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
-
-
 ### About concept mapping
 
 Concept mapping a method for crowd-sourcing the understanding of and/or
