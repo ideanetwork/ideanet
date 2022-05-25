@@ -125,7 +125,7 @@ get_hulls <- function(output_result) {
 
 cluster_means <- function(output_result) {
 
-  # . . replace plyr with dplyr -----
+  # start here . . replace plyr with dplyr -----
   # . . calculate the cluster mean for each cluster in the  cluster solution
   clu5_mean <- plyr::ddply(output_result, 'CLU5', summarize, ldim1 = mean(dim1), ldim2 = mean(dim2)) # cluster centers
   clu6_mean <- plyr::ddply(output_result, 'CLU6', summarize, ldim1 = mean(dim1), ldim2 = mean(dim2))
@@ -245,27 +245,6 @@ get_labels <- function(output_names, output_file) {
   top_labels <- read.xlsx(output_file, sheet = label_wks)
   assign("top_labels", top_labels, envir = .GlobalEnv)
 } # end get_labels function
-
-
-# start here, comment out xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -----
-# clears frames from canvas when a new menu item is chosen at top level menu
-# reset_canvas <- function() {
-#   if (exists("lpw.1")) tcltk::tkdestroy(lpw.1)
-#   if (exists("lpw.2")) tcltk::tkdestroy(lpw.2)
-#   if (exists("lpw.3")) tcltk::tkdestroy(lpw.3)
-#   if (exists("lpw.4")) tcltk::tkdestroy(lpw.4)
-#   if (exists("lpw.5")) tcltk::tkdestroy(lpw.5)
-#   if (exists("lpw.6")) tcltk::tkdestroy(lpw.6)
-#   if (exists("lpw.7")) tcltk::tkdestroy(lpw.7)
-#   if (exists("lpw.8")) tcltk::tkdestroy(lpw.8)
-#   if (exists("lpw.9")) tcltk::tkdestroy(lpw.9)
-#   if (exists("lpw.10")) tcltk::tkdestroy(lpw.10)
-#   if (exists("lpw.11")) tcltk::tkdestroy(lpw.11)
-#   if (exists("lpw.12")) tcltk::tkdestroy(lpw.12)
-#   if (exists("lpw.13")) tcltk::tkdestroy(lpw.13)
-#   if (exists("compute.layer.but")) tcltk::tkdestroy(compute.layer.but)
-#   if (exists("reset.but")) tcltk::tkdestroy(reset.but)
-# } # end reset_canvas
 
 select_measure <- function() {
   measure_choice <- tcltk::tclvalue(choose_measure)
@@ -669,7 +648,8 @@ sortdata_errorcheck <- function() {
 
   n_sorters <- stacked %>%
     group_by(sorter) %>%
-    dplyr::summarise(count = n_distinct(sorter))
+    dplyr::summarise(count = n_distinct(sorter)) %>%
+    ungroup()
 
   n_items <- length(ideas$item_text)
 
@@ -1509,7 +1489,8 @@ getdata_computemaps <- function() {
 
     df3 <- df3 %>%
       group_by(clus_label) %>%
-      dplyr::mutate(rank = 1:n()) # add rank, closest=1
+      dplyr::mutate(rank = 1:n()) %>% # add rank, closest=1
+      ungroup()
     colnames(df3) <- c(
       "label_ID", "label_name", "dim1",
       "dim2", "dist_clus_center",
@@ -2410,18 +2391,12 @@ pattern_analysis <- function() {
     # get hulls
     output_result <- output_result %>% dplyr::mutate(clutemp = .[[cluster_col]])
     find_hull <- function(output_result) output_result[chull(output_result$dim1, output_result$dim2), ]
-
-    # . . replace plyr with dplyr -----
     hulls <- plyr::ddply(output_result, "clutemp", find_hull)
 
-    # compute the location of cluster labels on the plots from dim1 and dim2
-    # . . replace plyr with dplyr -----
-    # clu_mean_loc <- plyr::ddply(output_result, (output_result[, cluster_col]),
-    #  summarize,ldim1 = mean(dim1), ldim2 = mean(dim2))
-
     clu_mean_loc<-output_result %>%
-      group_by(output_result[,cluster_col]) %>%
-      summarize(ldim1=mean(dim1), ldim2=mean(dim2))
+      dplyr::group_by(output_result[,cluster_col]) %>%
+      dplyr::summarize(ldim1=mean(dim1), ldim2=mean(dim2))%>%
+      ungroup()
 
     names(clu_mean_loc) <- c(get_clu_name, "ldim1", "ldim2") # rename so that the merge can use common name
     clu_mean_loc[[1]] <- as.numeric(as.character(clu_mean_loc[[1]])) # coerce from factor to numeric in order to join
@@ -2474,8 +2449,9 @@ pattern_analysis <- function() {
     output_result <- full_join(x = output_result, y = item_means, by = "item") # add subsetted item means to cluster data
 
     clu_mean_value <- output_result %>%
-      group_by(.[[cluster_col]]) %>%
-      dplyr::summarise(mean = mean(item_means))
+      dplyr::group_by(.[[cluster_col]]) %>%
+      dplyr::summarise(mean = mean(item_means)) %>%
+      ungroup()
     names(clu_mean_value) <- c(get_clu_name, "cluster_mean")
     clu_mean_value[[1]] <- as.numeric(as.character(clu_mean_value[[1]])) # coerce from factor to numeric in order to join
 
@@ -2492,8 +2468,6 @@ pattern_analysis <- function() {
         )
       )
     )
-
-
 
     # merge data for flextable output
     clu_mean_value <- full_join(clu_mean_value, clu_mean_loc)
@@ -3236,7 +3210,7 @@ pattern_matching <- function() {
     left_vert_label <- "Vertical axis"
     right_horiz_label <- "Horizontal axis"
 
-    # cluster solution 15 starts in column 3,
+    # cluster solution 15 starts in column 3 of output.xlsx output worksheet
     cluster_col <- if (clus_chosen == 15) {
       3
     } else if (clus_chosen == 14) {
@@ -3351,7 +3325,8 @@ pattern_matching <- function() {
     # left
     clu_mean_value_left <- output_result %>%
       group_by(clutemp) %>%
-      dplyr::summarise(Mean = mean(item_means_left))
+      dplyr::summarise(Mean = mean(item_means_left))%>%
+      ungroup()
 
     names(clu_mean_value_left) <- c(get_clu_name, "cluster_mean_left")
     clu_mean_value_left[[1]] <- as.numeric(as.character(clu_mean_value_left[[1]])) # coerce from factor to numeric in order to join
@@ -3359,7 +3334,8 @@ pattern_matching <- function() {
     # right
     clu_mean_value_right <- output_result %>%
       group_by(clutemp) %>%
-      dplyr::summarise(Mean = mean(item_means_right))
+      dplyr::summarise(Mean = mean(item_means_right))%>%
+      ungroup()
 
     names(clu_mean_value_right) <- c(get_clu_name, "cluster_mean_right")
     clu_mean_value_right[[1]] <- as.numeric(as.character(clu_mean_value_right[[1]])) # coerce from factor to numeric in order to join
@@ -3375,7 +3351,7 @@ pattern_matching <- function() {
     )
     corr_ladder <- format(round(corr_ladder, 2))
 
-    names(clu_mean_value_ladder) <- c("cluster", "cluster_name", "left_mean", "right_mean")
+    names('clu_mean_value_ladder') <- c("cluster", "cluster_name", "left_mean", "right_mean")
     clu_mean_value_ladder$left_mean <- round(clu_mean_value_ladder$left_mean, digits = 3)
     clu_mean_value_ladder$right_mean <- round(clu_mean_value_ladder$right_mean, digits = 3)
 
@@ -3415,7 +3391,10 @@ pattern_matching <- function() {
     right_label <- ladder_stack %>% dplyr::filter(measure == "right_mean")
 
     # . . ladder and flextables no change to data -----
-    ladder_scale <- ggplot2::ggplot(data = ladder_stack, aes(x = measure, y = value, group = group, colour = group)) +
+    ladder_scale <- ggplot2::ggplot(data = ladder_stack, aes(x = measure,
+                                                             y = value,
+                                                             group = group,
+                                                             colour = group)) +
       geom_line(linetype = "solid", size = 1) +
       geom_point(size = 3) +
       scale_y_continuous(
@@ -5060,8 +5039,8 @@ ideanet_license <- function() {
 ideanet_version <- function() {
   ver_msg0 <- ""
   ver_msg1 <- "Ideanet version 0.50."
-  ver_msg2 <- "This is a pre-release version. Creating additional functions and testing is still in process."
-  ver_msg3 <- "Code was created and tested with R version 4.12"
+  ver_msg2 <- "This is a development version. Creating additional functions and testing is still in process."
+  ver_msg3 <- "Code was created and tested with R version 4.13"
   version_msg <- paste(ver_msg1, ver_msg0, ver_msg2, ver_msg0, ver_msg3, sep = "\n")
   tcltk::tk_messageBox(type = "ok", message = version_msg)
 }
