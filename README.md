@@ -53,14 +53,17 @@ has [not]{.underline} been tested in a macOS environment.
 
 ### 1. Download supporting software
 
-This code has been developed ad tested using version 4.1.3 of R. At
+This code has been developed ad tested using version "4.2.0 patched" of R. At
 present the newest version of R (version 4.2) is causing problems
-unrelated to the application. I recommend downloading this older version
-of R until this problem is fixed. R version 4.1.3 can be downloaded at
+unrelated to the application. I recommend either using an older version of R or using the patched version. 
+
+R version 4.1.3 can be downloaded at
 the URL below. Navigate to to R version 4.1.3 and the click on the link
-for **R-4.1.3-win.exe** to download and then open the file to install. I
-recommend accepting all of the defaults. [Navigate to R version
-4.1.3](https://cran.r-project.org/bin/windows/base/old/4.1.3/){style="color: blue"}
+for **R-4.1.3-win.exe** to download and then open the file to install. 
+
+R version 4.1.3 can be downloaded at: https://cran.r-project.org/bin/windows/base/old/4.1.3/
+
+R version 4.2.0 patched can be downloaded at: https://cran.r-project.org/bin/windows/base/rpatched.html
 
 Rstudio desktop is recommended for running R code, a free version can be
 accessed here:
