@@ -1,5 +1,7 @@
 ideanet<-function(){
 
+# updated 12/03/22 changed names to colnames in line 3354 which was causing an error.
+
 clcol_15 <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#CDCD00", "#A65628", "#F781BF", "#999999", "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02") # 15 colors
 clcol_grey <- c(clcol_15, "#A9A9A9") # 15 colors + grey
 # subset the color palette for each cluster solution so that the color for a cluster number is the same in all plots (e.g. CL#1 is always E41A1C)
@@ -3351,7 +3353,7 @@ pattern_matching <- function() {
     )
     corr_ladder <- format(round(corr_ladder, 2))
 
-    names('clu_mean_value_ladder') <- c("cluster", "cluster_name", "left_mean", "right_mean")
+    colnames(clu_mean_value_ladder) <- c("cluster", "cluster_name", "left_mean", "right_mean")
     clu_mean_value_ladder$left_mean <- round(clu_mean_value_ladder$left_mean, digits = 3)
     clu_mean_value_ladder$right_mean <- round(clu_mean_value_ladder$right_mean, digits = 3)
 
